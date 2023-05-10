@@ -7,13 +7,17 @@ namespace ShopWebApp.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryRepository categoryRepository)
+        private readonly ILogger<CategoryController> _logger;
+
+        public CategoryController(ICategoryRepository categoryRepository, ILogger<CategoryController> logger)
         {
             _categoryRepository = categoryRepository;
+            _logger = logger;
         }
         public IActionResult Index()
         {
-            CategoryListViewModel categoriesListViewModel = new CategoryListViewModel(_categoryRepository.AllCategories);
+            _logger.LogInformation("Log Messages in Index() method of CategoryController");
+            CategoryListViewModel categoriesListViewModel = new(_categoryRepository.AllCategories);
             return View(categoriesListViewModel);
         }
     }

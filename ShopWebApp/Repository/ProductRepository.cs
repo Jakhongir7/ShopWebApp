@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ShopWebApp.Data;
 using ShopWebApp.Models;
 using ShopWebApp.Repository.Interface;
+using ShopWebApp.ViewModels;
 
 namespace ShopWebApp.Repository
 {
@@ -26,11 +28,36 @@ namespace ShopWebApp.Repository
             }
         }
 
-
-
-        public Product? GetProductById(int productId)
+        public ProductCreateViewModel CreateProduct()
         {
-            return _context.Products.FirstOrDefault(p => p.ProductId == productId);
+            var customer = new ProductCreateViewModel(/*_context.Products.ToList(), _context.Categories.ToList()*/)
+            {
+                Categories = _categoryRepository.GetCategories(),
+                Suppliers = _supplierRepository.GetSuppliers()
+            };
+            return customer;
+        }
+
+        public Product? GetById(int? productId)
+        {
+            return _context.Products.Find(productId);
+        }
+        public void Add(Product obj)
+        {
+            _context.Products.Add(obj);
+        }
+        public void Edit(Product obj)
+        {
+            _context.Products.Attach(obj);
+            _context.Entry(obj).State = EntityState.Modified;
+        }
+        public void Delete(Product obj)
+        {
+            _context.Products.Remove(obj);
+        }
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
     }
 }

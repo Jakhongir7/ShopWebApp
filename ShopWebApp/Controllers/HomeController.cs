@@ -15,6 +15,7 @@ namespace ShopWebApp.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Log Messages in Index() method of HomeController");
             return View();
         }
 
